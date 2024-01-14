@@ -1,9 +1,9 @@
 package com.example.medlab.services;
 
 import com.example.medlab.exceptions.ResourceNotFoundException;
+import com.example.medlab.model.dto.lab.LaboratoryInput;
 import com.example.medlab.model.entities.Laboratory;
 import com.example.medlab.repositories.LaboratoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +11,15 @@ import java.util.List;
 @Service
 public class LaboratoryServiceImpl implements LaboratoryService {
 
-    @Autowired
     private LaboratoryRepository laboratoryRepository;
 
+    public LaboratoryServiceImpl(LaboratoryRepository laboratoryRepository) {
+        this.laboratoryRepository = laboratoryRepository;
+    }
+
     @Override
-    public Laboratory saveLaboratory(Laboratory laboratory) {
+    public Laboratory saveLaboratory(LaboratoryInput input) {
+        Laboratory laboratory = new Laboratory(input);
         return laboratoryRepository.save(laboratory);
     }
 
@@ -34,24 +38,27 @@ public class LaboratoryServiceImpl implements LaboratoryService {
     }
 
     @Override
-    public void modifyLaboratory(Long labId, Laboratory laboratory) {
+    public void modifyLaboratory(Long labId, LaboratoryInput input) {
         if (exists(labId)) {
-            saveLaboratory(laboratory);
+            Laboratory newLab = new Laboratory(input);
+            newLab.setId(labId);
+            laboratoryRepository.save(newLab);
         } else {
             throw new ResourceNotFoundException("Laboratory not found.");
         }
     }
 
     @Override
-    public void partiallyModifyLaboratory(Long labId, Laboratory inputLaboratory) {
+    public void partiallyModifyLaboratory(Long labId, LaboratoryInput input) {
         if (exists(labId)) {
             Laboratory originalLab = getLaboratory(labId);
-            originalLab.setHospitalName(inputLaboratory.getHospitalName() != null ? inputLaboratory.getHospitalName() : originalLab.getHospitalName());
-            originalLab.setAddress(inputLaboratory.getAddress() != null ? inputLaboratory.getAddress() : originalLab.getAddress());
-            originalLab.setEmail(inputLaboratory.getEmail() != null ? inputLaboratory.getEmail() : originalLab.getEmail());
-            originalLab.setName(inputLaboratory.getName() != null ? inputLaboratory.getName() : originalLab.getName());
-            originalLab.setPhone(inputLaboratory.getPhone() != null ? inputLaboratory.getPhone() : originalLab.getPhone());
-            saveLaboratory(originalLab);
+            LaboratoryInput lab = new LaboratoryInput(originalLab);
+            lab.setHospitalName(input.getHospitalName() != null ? input.getHospitalName() : lab.getHospitalName());
+            lab.setAddress(input.getAddress() != null ? input.getAddress() : lab.getAddress());
+            lab.setEmail(input.getEmail() != null ? input.getEmail() : lab.getEmail());
+            lab.setName(input.getName() != null ? input.getName() : lab.getName());
+            lab.setPhone(input.getPhone() != null ? input.getPhone() : lab.getPhone());
+            saveLaboratory(lab);
         } else {
             throw new ResourceNotFoundException("Laboratory not found.");
         }

@@ -1,6 +1,8 @@
 package com.example.medlab.model.entities;
 
+import com.example.medlab.model.dto.lab.LaboratoryInput;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -22,6 +24,7 @@ public class Laboratory {
 
     @Column(name = "email")
     @NotBlank(message = "email should not be blank")
+    @Email
     private String email;
 
     @Column(name = "phone")
@@ -30,6 +33,26 @@ public class Laboratory {
 
     @Column(name = "hospital_name")
     private String hospitalName;
+
+    public Laboratory() {
+    }
+
+    public Laboratory(Long id, String name, String address, String email, String phone, String hospitalName) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.phone = phone;
+        this.hospitalName = hospitalName;
+    }
+
+    public Laboratory(LaboratoryInput input) {
+        this.name = input.getName();
+        this.address = input.getAddress();
+        this.email = input.getEmail();
+        this.phone = input.getPhone();
+        this.hospitalName = input.getHospitalName();
+    }
 
     public Long getId() {
         return id;

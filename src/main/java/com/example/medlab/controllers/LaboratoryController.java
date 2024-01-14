@@ -1,6 +1,7 @@
 package com.example.medlab.controllers;
 
 import com.example.medlab.exceptions.ResourceNotFoundException;
+import com.example.medlab.model.dto.lab.LaboratoryInput;
 import com.example.medlab.model.entities.Laboratory;
 import com.example.medlab.services.LaboratoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +23,11 @@ import java.util.List;
 @RequestMapping("/laboratories")
 public class LaboratoryController {
 
-    @Autowired
     private LaboratoryService laboratoryService;
+
+    public LaboratoryController(LaboratoryService laboratoryService) {
+        this.laboratoryService = laboratoryService;
+    }
 
     @Operation(
             summary = "Create a laboratory",
@@ -38,7 +41,7 @@ public class LaboratoryController {
     )
 
     @PostMapping()
-    public ResponseEntity<Void> saveLaboratory(@Valid @RequestBody Laboratory requestBody, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<Laboratory> saveLaboratory(@Valid @RequestBody LaboratoryInput requestBody, UriComponentsBuilder uriComponentsBuilder) {
         Laboratory laboratory = laboratoryService.saveLaboratory(requestBody);
 
         URI uri = uriComponentsBuilder
@@ -46,7 +49,7 @@ public class LaboratoryController {
                 .buildAndExpand(laboratory.getId())
                 .toUri();
 
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(laboratory);
     }
 
     @Operation(summary = "Get laboratories")
@@ -61,29 +64,29 @@ public class LaboratoryController {
         try {
             return ResponseEntity.ok(laboratoryService.getLaboratory(labId));
         } catch (ResourceNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
     @Operation(summary = "Modify a laboratory")
     @PutMapping("/{labId}")
-    public ResponseEntity<Void> modifyLaboratory(@PathVariable Long labId,@Valid @RequestBody Laboratory laboratory) {
+    public ResponseEntity<Void> modifyLaboratory(@PathVariable Long labId,@Valid @RequestBody LaboratoryInput requestBody) {
         try {
-            laboratoryService.modifyLaboratory(labId, laboratory);
+            laboratoryService.modifyLaboratory(labId, requestBody);
             return ResponseEntity.noContent().build();
         } catch (ResourceNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
     @Operation(summary = "Partially modify a laboratory")
     @PatchMapping("/{labId}")
-    public ResponseEntity<Void> partiallyModifyLaboratory(@PathVariable Long labId,@RequestBody Laboratory laboratory) {
+    public ResponseEntity<Void> partiallyModifyLaboratory(@PathVariable Long labId,@RequestBody LaboratoryInput requestBody) {
         try {
-            laboratoryService.partiallyModifyLaboratory(labId, laboratory);
+            laboratoryService.partiallyModifyLaboratory(labId, requestBody);
             return ResponseEntity.noContent().build();
         } catch (ResourceNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -94,7 +97,7 @@ public class LaboratoryController {
             laboratoryService.deleteLaboratory(labId);
             return ResponseEntity.noContent().build();
         } catch (ResourceNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
