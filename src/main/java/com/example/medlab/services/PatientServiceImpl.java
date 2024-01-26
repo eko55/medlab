@@ -1,7 +1,10 @@
 package com.example.medlab.services;
 
+import com.example.medlab.exceptions.ResourceAlreadyExistsException;
 import com.example.medlab.exceptions.ResourceNotFoundException;
-import com.example.medlab.model.dto.patient.PatientCreationInput;
+import com.example.medlab.model.dto.patient.PatientCreationRequest;
+import com.example.medlab.model.entities.Employee;
+import com.example.medlab.model.entities.Laboratory;
 import com.example.medlab.model.entities.Patient;
 import com.example.medlab.repositories.PatientRepository;
 import org.springframework.stereotype.Service;
@@ -13,14 +16,31 @@ public class PatientServiceImpl implements PatientService {
 
     private PatientRepository patientRepository;
 
-    public PatientServiceImpl(PatientRepository patientRepository) {
+    private LaboratoryService laboratoryService;
+
+    public PatientServiceImpl(PatientRepository patientRepository, LaboratoryService laboratoryService) {
         this.patientRepository = patientRepository;
+        this.laboratoryService = laboratoryService;
     }
 
     @Override
-    public Patient savePatient(PatientCreationInput input) {
-        Patient patient = new Patient(input);
-        return patientRepository.save(patient);
+    public Patient savePatient(PatientCreationRequest request) {
+        if (laboratoryService.existsByName(request.getLabName())) {
+            Laboratory lab = laboratoryService.getLaboratory(request.getLabName());
+            if (!patientRepository.existsByPersonalNumber(request.getPersonalNumber())) {
+                Patient patient = Patient.builder()
+                        .personalNumber(request.getPersonalNumber())
+                        .firstName(request.getFirstName())
+                        .lastName(request.getLastName())
+                        .labId(lab.getId())
+                        .build();
+                return patientRepository.save(patient);
+            } else {
+                throw new ResourceAlreadyExistsException("Patient with the given personal number already exists!");
+            }
+        } else {
+            throw new ResourceAlreadyExistsException("Laboratory with the given name does not exists!");
+        }
     }
 
     @Override
@@ -38,13 +58,34 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Patient modifyPatient(Long patientId, PatientCreationInput input) {
-        if (patientExists(patientId)) {
-            Patient patient = new Patient(input);
-            patient.setId(patientId);
-            return patientRepository.save(patient);
+    public List<Patient> getPatients(String labName) {
+        if(laboratoryService.existsByName(labName)) {
+            Laboratory laboratory = laboratoryService.getLaboratory(labName);
+            return patientRepository.findByLabId(laboratory.getId());
         } else {
-            throw new ResourceNotFoundException(String.format("Patient with id %s doesn't exists.", patientId));
+            throw new ResourceNotFoundException("Laboratory with the given name does not exists!");
+        }
+
+    }
+
+    @Override
+    public Patient modifyPatient(Long patientId, PatientCreationRequest request) {
+        if (laboratoryService.existsByName(request.getLabName())) {
+            Laboratory lab = laboratoryService.getLaboratory(request.getLabName());
+            if (!patientRepository.existsByPersonalNumber(request.getPersonalNumber())) {
+                Patient patient = Patient.builder()
+                        .id(patientId)
+                        .personalNumber(request.getPersonalNumber())
+                        .firstName(request.getFirstName())
+                        .lastName(request.getLastName())
+                        .labId(lab.getId())
+                        .build();
+                return patientRepository.save(patient);
+            } else {
+                throw new ResourceAlreadyExistsException("Patient with the given personal number already exists!");
+            }
+        } else {
+            throw new ResourceAlreadyExistsException("Laboratory with the given name does not exists!");
         }
     }
 

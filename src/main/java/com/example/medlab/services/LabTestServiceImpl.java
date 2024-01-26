@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LabTestServiceImpl implements LabTestService{
+public class LabTestServiceImpl implements LabTestService {
 
     private LabTestRepository labTestRepository;
 
@@ -30,6 +30,11 @@ public class LabTestServiceImpl implements LabTestService{
         } else {
             throw new ResourceNotFoundException(String.format("Test with id %s doesn't exists.", testId));
         }
+    }
+
+    @Override
+    public LabTest getTest(String testName, Long labId) {
+        return labTestRepository.findByNameAndLabId(testName, labId);
     }
 
     @Override

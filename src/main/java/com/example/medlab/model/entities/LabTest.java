@@ -27,6 +27,14 @@ public class LabTest {
     @NotNull(message = "price should not be null")
     private BigDecimal price;
 
+    @Column(name = "reference_range")
+    @NotBlank(message = "referenceRange should not be blank")
+    private String referenceRange;
+
+    @Column(name = "units")
+    @NotBlank(message = "units should not be blank")
+    private String units;
+
     @Column(name = "lab_Id")
     @NotNull(message = "labId should not be null")
     private Long labId;
@@ -34,11 +42,13 @@ public class LabTest {
     public LabTest() {
 
     }
-    public LabTest(Long id, String name, String description, BigDecimal price, Long labId) {
+    public LabTest(Long id, String name, String description, BigDecimal price, String referenceRange, String units, Long labId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.referenceRange = referenceRange;
+        this.units = units;
         this.labId = labId;
     }
 
@@ -46,6 +56,8 @@ public class LabTest {
         this.name = input.getName();
         this.description = input.getDescription();
         this.price = input.getPrice();
+        this.referenceRange = input.getReferenceRange();
+        this.units = input.getUnits();
         this.labId = input.getLabId();
     }
 
@@ -87,5 +99,21 @@ public class LabTest {
 
     public void setLabId(Long labId) {
         this.labId = labId;
+    }
+
+    public String getReferenceRange() {
+        return referenceRange;
+    }
+
+    public void setReferenceRange(String referenceRange) {
+        this.referenceRange = referenceRange;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 }
