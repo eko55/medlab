@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './NavigationBarStyle.css'
+import LogoutButton from '../Buttons/LogoutButton';
 
 const NavigationBar = () => {
     //TODO: Handle patient and employee page logic as well
@@ -24,6 +25,9 @@ const NavigationBar = () => {
                 </li>
                 <li>
                     <Link to="/admin/patient-examinations">Patient Examinations</Link>
+                </li>
+                <li>
+                    <LogoutButton />
                 </li>
             </ul>
         </nav>

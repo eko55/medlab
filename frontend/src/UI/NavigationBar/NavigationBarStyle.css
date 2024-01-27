@@ -1,41 +1,40 @@
 /* NavigationBar.css */
 
 nav {
-    background-color: #4CAF50;
-    padding: 10px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-  }
-  
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-  
+  background-color: #4CAF50;
+  padding: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #ddd;
+}
+
+@media only screen and (max-width: 600px) {
   li {
-    margin-bottom: 10px;
+    margin-right: 0;
+    /* Remove right margin on small screens */
+    width: 100%;
+    /* Make items take full width on small screens */
   }
-  
-  a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-  }
-  
-  a:hover {
-    color: #ddd;
-  }
-  
-  @media only screen and (max-width: 600px) {
-    li {
-      margin-right: 0; /* Remove right margin on small screens */
-      width: 100%; /* Make items take full width on small screens */
-    }
-  }
-  
+}
