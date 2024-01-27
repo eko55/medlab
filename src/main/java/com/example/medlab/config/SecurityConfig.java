@@ -1,5 +1,6 @@
 package com.example.medlab.config;
 
+import com.example.medlab.model.Role;
 import com.example.medlab.model.entities.AppUser;
 import com.example.medlab.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
@@ -60,7 +61,8 @@ public class SecurityConfig {
                     return admin;
                 }
                 AppUser appUser = userRepository.findUserByUsername(username);
-                return new User(appUser.getUsername(), appUser.getPassword(), Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
+                Role role = appUser.getRole();
+                return new User(appUser.getUsername(), appUser.getPassword(), Collections.singleton(new SimpleGrantedAuthority(role.name())));
             }
         };
     }

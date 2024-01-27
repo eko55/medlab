@@ -1,9 +1,15 @@
 package com.example.medlab.controllers;
 
+import com.example.medlab.exceptions.NoAssignedRoleException;
 import com.example.medlab.exceptions.ResourceNotFoundException;
+import com.example.medlab.model.Role;
 import com.example.medlab.model.dto.testresults.TestResultsInput;
+import com.example.medlab.model.entities.AppUser;
+import com.example.medlab.model.entities.Patient;
 import com.example.medlab.model.entities.TestResults;
+import com.example.medlab.services.PatientService;
 import com.example.medlab.services.TestResultsService;
+import com.example.medlab.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -23,8 +29,14 @@ public class TestResultsController {
 
     private TestResultsService testResultsService;
 
-    public TestResultsController(TestResultsService testResultsService) {
+    private UserService userService;
+
+    private PatientService patientService;
+
+    public TestResultsController(TestResultsService testResultsService, UserService userService, PatientService patientService) {
         this.testResultsService = testResultsService;
+        this.userService = userService;
+        this.patientService = patientService;
     }
 
     @PostMapping
@@ -50,26 +62,38 @@ public class TestResultsController {
 
     @GetMapping
     public ResponseEntity<List<TestResults>> getTestResults(@RequestParam(required = false) Long employeeId, @RequestParam(required = false) Long patientId, Authentication authentication) {
-        if (employeeId != null && patientId != null) {
-            try {
-                return ResponseEntity.ok(testResultsService.getTestResultsByEmployeeAndPatientId(employeeId, patientId, authentication));
-            } catch (ResourceNotFoundException e){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        if (userService.hasRole(authentication, Role.EMPLOYEE)) {
+            if (employeeId != null && patientId != null) {
+                try {
+                    return ResponseEntity.ok(testResultsService.getTestResultsByEmployeeAndPatientId(employeeId, patientId, authentication));
+                } catch (ResourceNotFoundException e) {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+                }
+            } else if (employeeId != null) {
+                try {
+                    return ResponseEntity.ok(testResultsService.getTestResultsByEmployee(employeeId));
+                } catch (ResourceNotFoundException e) {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+                }
+            } else if (patientId != null) {
+                try {
+                    return ResponseEntity.ok(testResultsService.getTestResultsForPatient(patientId));
+                } catch (ResourceNotFoundException e) {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+                }
+            } else {
+                return ResponseEntity.ok(testResultsService.getTestResultsByEmployee());
             }
-        } else if (employeeId != null) {
+        } else if (userService.hasRole(authentication, Role.PATIENT)) {
+            AppUser user = userService.getUserByUsername(authentication.getName());
+            Patient patient = patientService.getPatientByUserId(user.getId());
             try {
-                return ResponseEntity.ok(testResultsService.getTestResultsByEmployee(employeeId));
-            } catch (ResourceNotFoundException e){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-            }
-        } else if (patientId != null) {
-            try {
-                return ResponseEntity.ok(testResultsService.getTestResultsForPatient(patientId));
-            } catch (ResourceNotFoundException e){
+                return ResponseEntity.ok(testResultsService.getTestResultsForPatient(patient.getId()));
+            } catch (ResourceNotFoundException e) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
             }
         } else {
-            return ResponseEntity.ok(testResultsService.getTestResultsByEmployee());
+            throw new NoAssignedRoleException("The user should have either EMPLOYEE or PATIENT role assigned to execute the give operation!");
         }
     }
 

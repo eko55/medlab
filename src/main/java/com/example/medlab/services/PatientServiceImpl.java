@@ -3,7 +3,6 @@ package com.example.medlab.services;
 import com.example.medlab.exceptions.ResourceAlreadyExistsException;
 import com.example.medlab.exceptions.ResourceNotFoundException;
 import com.example.medlab.model.dto.patient.PatientCreationRequest;
-import com.example.medlab.model.entities.Employee;
 import com.example.medlab.model.entities.Laboratory;
 import com.example.medlab.model.entities.Patient;
 import com.example.medlab.repositories.PatientRepository;
@@ -18,9 +17,12 @@ public class PatientServiceImpl implements PatientService {
 
     private LaboratoryService laboratoryService;
 
-    public PatientServiceImpl(PatientRepository patientRepository, LaboratoryService laboratoryService) {
+    private UserService userService;
+
+    public PatientServiceImpl(PatientRepository patientRepository, LaboratoryService laboratoryService, UserService userService) {
         this.patientRepository = patientRepository;
         this.laboratoryService = laboratoryService;
+        this.userService = userService;
     }
 
     @Override
@@ -50,6 +52,11 @@ public class PatientServiceImpl implements PatientService {
         } else {
             throw new ResourceNotFoundException(String.format("Patient with id %s doesn't exists.", patientId));
         }
+    }
+
+    @Override
+    public Patient getPatientByUserId(Long userId) {
+        return patientRepository.findByUserId(userId);
     }
 
     @Override

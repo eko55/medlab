@@ -31,16 +31,20 @@ public class Employee {
     @NotNull(message = "labId must not be null")
     private Long labId;
 
+    @Column(name = "user_id")
+    @NotNull(message = "userId must not be null")
+    private Long userId;
 
     public Employee() {
     }
 
-    public Employee(Long id, String personalNumber, String firstName, String lastName, Long labId) {
+    public Employee(Long id, String personalNumber, String firstName, String lastName, Long labId, Long userId) {
         this.id = id;
         this.personalNumber = personalNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.labId = labId;
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -81,5 +85,13 @@ public class Employee {
 
     public void setLabId(Long labId) {
         this.labId = labId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

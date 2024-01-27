@@ -1,23 +1,38 @@
+INSERT INTO users (username,password,role)
+VALUES ('user1','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',0),
+ ('user2','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',0),
+ ('user3','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',0),
+ ('user4','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',0),
+ ('user5','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',0),
+ ('user6','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',0),
+ ('user7','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',1),
+ ('user8','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',1),
+ ('user9','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',1),
+ ('user10','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',1),
+ ('user11','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',1),
+ ('user12','$2a$12$WdUqLbzz1r7QwergSQMJPOEWdNSVzvKRM2Q0wvKCT8RsOsAbF.Rva',1);
+
+
 INSERT INTO laboratories (name,address,email,phone,hospital_name)
 VALUES ('A-Lab','Sofia Some Random Street 1','alab@lab.com','0888111111','Sofia Hospital A'),
  ('B-Lab','Sofia Some Random Street 2','blab@lab.com','0888111112','Sofia Hospital B'),
  ('C-Lab','Sofia Some Random Street 3','clab@lab.com','0888111113','Sofia Hospital C');
 
-INSERT INTO employees (personal_number,first_name,last_name,lab_id)
-VALUES ('9511112345','Antoaneta','Antonova',1),
- ('9411112345','Bogdan','Bogdanov',1),
- ('9311112345','Vesela','Vasileva',2),
- ('9211112345','Geoergi','Georgiev',2),
- ('9111112345','Dimitar','Dimitrov',3),
- ('9011112345','Emil','Emilov',3);
+INSERT INTO employees (personal_number,first_name,last_name,lab_id,user_id)
+VALUES ('9511112345','Antoaneta','Antonova',1,1),
+ ('9411112345','Bogdan','Bogdanov',1,2),
+ ('9311112345','Vesela','Vasileva',2,3),
+ ('9211112345','Geoergi','Georgiev',2,4),
+ ('9111112345','Dimitar','Dimitrov',3,5),
+ ('9011112345','Emil','Emilov',3,6);
 
-INSERT INTO patients (personal_number,first_name,last_name,lab_id)
-VALUES ('9511112345','Asen','Asenov',1),
- ('9411112345','Boyan','Boyanov',1),
- ('9311112345','Valentin','Valentinov',2),
- ('9211112345','Galina','Georgieva',2),
- ('9111112345','Diyana','Dimitrova',3),
- ('9011112345','Emiliya','Emilova',3);
+INSERT INTO patients (personal_number,first_name,last_name,lab_id,user_id)
+VALUES ('9511112345','Asen','Asenov',1,7),
+ ('9411112345','Boyan','Boyanov',1,8),
+ ('9311112345','Valentin','Valentinov',2,9),
+ ('9211112345','Galina','Georgieva',2,10),
+ ('9111112345','Diyana','Dimitrova',3,11),
+ ('9011112345','Emiliya','Emilova',3,12);
 
 
 INSERT INTO lab_tests (name,description,reference_range,units,price,lab_id)
