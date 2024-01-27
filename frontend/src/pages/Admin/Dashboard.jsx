@@ -1,13 +1,18 @@
 import React from 'react';
+import NavigationBar from '../../UI/NavigationBar/NavigationBar';
+import '../../MainPage.css'
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   return (
     <>
-      <h2>Welcome to the Dashboard!</h2>
-      <p>This is your personalized dashboard content.</p>
-      {/* Add more dashboard components and features as needed */}
+      <NavigationBar />
+      <div className='main-container'>
+        <h2>Welcome to the Admin Dashboard!</h2>
+        <p>From here, you can manage laboratories, employees, patients and patient exams.</p>
+        <p>Click on one of the options from the upper menu to get started.</p>
+      </div>
     </>
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;

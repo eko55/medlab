@@ -20,11 +20,10 @@ const Login = () => {
     e.preventDefault();
     
     try {
-        //MAKE API CALL HERE
       const response = validateUser("","");
 
       if (response) {
-        navigate('/');
+        navigate('/admin/dashboard');
       } else {
         console.error('Authentication failed');
       }
