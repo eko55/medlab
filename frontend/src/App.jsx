@@ -1,20 +1,11 @@
-import { Navigate } from 'react-router-dom';
+import React from 'react';
 import './App.css';
-import './ValidateUser.js'
-import validateUser from './ValidateUser.js';
 
 const App = () => {
-  //handle validating user
-  const isUserValid = validateUser("", "");
-  return isUserValid ? (
+  return (
     <div>
-      <div>
-        <div>
-        </div>
-      </div>
+      <h1>MedLab Application</h1>
     </div>
-  ) : (
-    <Navigate to={"/login"} />
   );
 };
 
