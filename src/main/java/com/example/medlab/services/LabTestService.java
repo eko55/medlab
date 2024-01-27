@@ -11,6 +11,8 @@ public interface LabTestService {
 
     LabTest getTest(Long testId);
 
+    LabTest getTest(String testName, Long labId);
+
     List<LabTest> getTests();
 
     LabTest modifyTest(Long testId, LabTestInput labTestInput);

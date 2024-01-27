@@ -16,6 +16,12 @@ public class LabTestInput {
     @NotNull(message = "price should not be null")
     private BigDecimal price;
 
+    @NotBlank(message = "referenceRange should not be blank")
+    private String referenceRange;
+
+    @NotBlank(message = "units should not be blank")
+    private String units;
+
     @NotNull(message = "labId should not be null")
     private Long labId;
 
@@ -49,5 +55,21 @@ public class LabTestInput {
 
     public void setLabId(Long labId) {
         this.labId = labId;
+    }
+
+    public String getReferenceRange() {
+        return referenceRange;
+    }
+
+    public void setReferenceRange(String referenceRange) {
+        this.referenceRange = referenceRange;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 }

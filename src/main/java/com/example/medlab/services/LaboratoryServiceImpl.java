@@ -1,5 +1,6 @@
 package com.example.medlab.services;
 
+import com.example.medlab.exceptions.ResourceAlreadyExistsException;
 import com.example.medlab.exceptions.ResourceNotFoundException;
 import com.example.medlab.model.dto.lab.LaboratoryInput;
 import com.example.medlab.model.entities.Laboratory;
@@ -19,8 +20,12 @@ public class LaboratoryServiceImpl implements LaboratoryService {
 
     @Override
     public Laboratory saveLaboratory(LaboratoryInput input) {
-        Laboratory laboratory = new Laboratory(input);
-        return laboratoryRepository.save(laboratory);
+        if (!laboratoryRepository.existsByName(input.getName())) {
+            Laboratory laboratory = new Laboratory(input);
+            return laboratoryRepository.save(laboratory);
+        } else {
+            throw new ResourceAlreadyExistsException("Laboratory with the given name already exists!");
+        }
     }
 
     @Override
@@ -30,6 +35,11 @@ public class LaboratoryServiceImpl implements LaboratoryService {
         } else {
             throw new ResourceNotFoundException("Laboratory not found.");
         }
+    }
+
+    @Override
+    public Laboratory getLaboratory(String labName) {
+        return laboratoryRepository.findByName(labName);
     }
 
     @Override
@@ -49,16 +59,15 @@ public class LaboratoryServiceImpl implements LaboratoryService {
     }
 
     @Override
-    public void partiallyModifyLaboratory(Long labId, LaboratoryInput input) {
+    public Laboratory partiallyModifyLaboratory(Long labId, LaboratoryInput input) {
         if (exists(labId)) {
             Laboratory originalLab = getLaboratory(labId);
-            LaboratoryInput lab = new LaboratoryInput(originalLab);
-            lab.setHospitalName(input.getHospitalName() != null ? input.getHospitalName() : lab.getHospitalName());
-            lab.setAddress(input.getAddress() != null ? input.getAddress() : lab.getAddress());
-            lab.setEmail(input.getEmail() != null ? input.getEmail() : lab.getEmail());
-            lab.setName(input.getName() != null ? input.getName() : lab.getName());
-            lab.setPhone(input.getPhone() != null ? input.getPhone() : lab.getPhone());
-            saveLaboratory(lab);
+            originalLab.setHospitalName(input.getHospitalName() != null ? input.getHospitalName() : originalLab.getHospitalName());
+            originalLab.setAddress(input.getAddress() != null ? input.getAddress() : originalLab.getAddress());
+            originalLab.setEmail(input.getEmail() != null ? input.getEmail() : originalLab.getEmail());
+            originalLab.setName(input.getName() != null ? input.getName() : originalLab.getName());
+            originalLab.setPhone(input.getPhone() != null ? input.getPhone() : originalLab.getPhone());
+            return laboratoryRepository.save(originalLab);
         } else {
             throw new ResourceNotFoundException("Laboratory not found.");
         }
@@ -76,5 +85,10 @@ public class LaboratoryServiceImpl implements LaboratoryService {
     @Override
     public boolean exists(Long labId) {
         return laboratoryRepository.existsById(labId);
+    }
+
+    @Override
+    public boolean existsByName(String labName) {
+        return laboratoryRepository.existsByName(labName);
     }
 }

@@ -1,7 +1,8 @@
 package com.example.medlab.controllers;
 
+import com.example.medlab.exceptions.ResourceAlreadyExistsException;
 import com.example.medlab.exceptions.ResourceNotFoundException;
-import com.example.medlab.model.dto.employee.EmployeeCreationInput;
+import com.example.medlab.model.dto.employee.EmployeeCreationRequest;
 import com.example.medlab.model.entities.Employee;
 import com.example.medlab.services.EmployeeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,8 +28,13 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createUser(@Valid @RequestBody EmployeeCreationInput requestBody, UriComponentsBuilder builder) {
-        Employee employee = employeeService.saveEmployee(requestBody);
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeCreationRequest requestBody, UriComponentsBuilder builder) {
+        Employee employee;
+        try {
+            employee = employeeService.saveEmployee(requestBody);
+        } catch (ResourceAlreadyExistsException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
 
         URI locationOfNewUserResource = builder
                 .path("employees/{id}")
@@ -48,12 +54,16 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getEmployees() {
-        return ResponseEntity.ok(employeeService.getEmployees());
+    public ResponseEntity<List<Employee>> getEmployees(@RequestParam(required = false) String labName) {
+        if (labName != null) {
+            return ResponseEntity.ok(employeeService.getEmployees(labName));
+        } else {
+            return ResponseEntity.ok(employeeService.getEmployees());
+        }
     }
 
     @PutMapping("/{employeeId}")
-    public ResponseEntity<Employee> modifyEmployee(@PathVariable Long employeeId, @Valid @RequestBody EmployeeCreationInput requestBody) {
+    public ResponseEntity<Employee> modifyEmployee(@PathVariable Long employeeId, @Valid @RequestBody EmployeeCreationRequest requestBody) {
         try {
             return ResponseEntity.ok(employeeService.modifyEmployee(employeeId, requestBody));
         } catch (ResourceNotFoundException e) {

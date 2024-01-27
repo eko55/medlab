@@ -28,7 +28,7 @@ public class LaboratoryInput {
     public LaboratoryInput(Laboratory lab) {
         this.name = lab.getName();
         this.address = lab.getAddress();
-        this.email = lab.getAddress();
+        this.email = lab.getEmail();
         this.phone = lab.getPhone();
         this.hospitalName = lab.getHospitalName();
     }

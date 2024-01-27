@@ -1,5 +1,6 @@
 package com.example.medlab.controllers;
 
+import com.example.medlab.exceptions.ResourceAlreadyExistsException;
 import com.example.medlab.exceptions.ResourceNotFoundException;
 import com.example.medlab.model.dto.lab.LaboratoryInput;
 import com.example.medlab.model.entities.Laboratory;
@@ -33,16 +34,16 @@ public class LaboratoryController {
             summary = "Create a laboratory",
             responses = {@ApiResponse(responseCode = "201", description = "Laboratory is created", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Laboratory not found", content = @Content)}
-//            ,requestBody = {@RequestBody(
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            schema = @Schema(ref = "LaboratoryInput.class")
-//                    ))}
     )
 
     @PostMapping()
     public ResponseEntity<Laboratory> saveLaboratory(@Valid @RequestBody LaboratoryInput requestBody, UriComponentsBuilder uriComponentsBuilder) {
-        Laboratory laboratory = laboratoryService.saveLaboratory(requestBody);
+        Laboratory laboratory;
+        try {
+            laboratory = laboratoryService.saveLaboratory(requestBody);
+        } catch (ResourceAlreadyExistsException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
 
         URI uri = uriComponentsBuilder
                 .path("laboratories/{id}")
@@ -81,10 +82,10 @@ public class LaboratoryController {
 
     @Operation(summary = "Partially modify a laboratory")
     @PatchMapping("/{labId}")
-    public ResponseEntity<Void> partiallyModifyLaboratory(@PathVariable Long labId,@RequestBody LaboratoryInput requestBody) {
+    public ResponseEntity<Laboratory> partiallyModifyLaboratory(@PathVariable Long labId,@RequestBody LaboratoryInput requestBody) {
         try {
-            laboratoryService.partiallyModifyLaboratory(labId, requestBody);
-            return ResponseEntity.noContent().build();
+            Laboratory laboratory = laboratoryService.partiallyModifyLaboratory(labId, requestBody);
+            return ResponseEntity.ok(laboratory);
         } catch (ResourceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }

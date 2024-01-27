@@ -1,6 +1,5 @@
 package com.example.medlab.model.dto.testresults;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -11,23 +10,15 @@ public class TestResultsInput {
     @NotNull(message = "date should not be null")
     private Date date;
 
-    @Column(name = "referral_values")
-    @NotNull(message = "referralValues should not be null")
-    private Double referralValues;
+    @NotNull(message = "values should not be null")
+    private Double values;
 
-    @Column(name = "units")
-    @NotBlank(message = "units should not be blank")
-    private String units;
+    @NotBlank(message = "labTestName should not be blank")
+    private String labTestName;
 
-    @Column(name = "lab_test_id")
-    @NotNull(message = "labId should not be null")
-    private Long labId;
-
-    @Column(name = "patient_id")
     @NotNull(message = "patientId should not be null")
     private Long patientId;
 
-    @Column(name = "lab_employee_id")
     @NotNull(message = "labEmployeeId should not be null")
     private Long labEmployeeId;
 
@@ -39,28 +30,12 @@ public class TestResultsInput {
         this.date = date;
     }
 
-    public Double getReferralValues() {
-        return referralValues;
+    public Double getValues() {
+        return values;
     }
 
-    public void setReferralValues(Double referralValues) {
-        this.referralValues = referralValues;
-    }
-
-    public String getUnits() {
-        return units;
-    }
-
-    public void setUnits(String units) {
-        this.units = units;
-    }
-
-    public Long getLabId() {
-        return labId;
-    }
-
-    public void setLabId(Long labId) {
-        this.labId = labId;
+    public void setValues(Double values) {
+        this.values = values;
     }
 
     public Long getPatientId() {
@@ -77,5 +52,13 @@ public class TestResultsInput {
 
     public void setLabEmployeeId(Long labEmployeeId) {
         this.labEmployeeId = labEmployeeId;
+    }
+
+    public String getLabTestName() {
+        return labTestName;
+    }
+
+    public void setLabTestName(String labTestName) {
+        this.labTestName = labTestName;
     }
 }

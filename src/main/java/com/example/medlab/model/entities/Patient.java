@@ -1,11 +1,11 @@
 package com.example.medlab.model.entities;
 
-import com.example.medlab.model.dto.employee.EmployeeCreationInput;
-import com.example.medlab.model.dto.patient.PatientCreationInput;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
+@Builder
 @Entity
 @Table(name = "patients")
 public class Patient {
@@ -40,13 +40,6 @@ public class Patient {
         this.firstName = firstName;
         this.lastName = lastName;
         this.labId = labId;
-    }
-
-    public Patient(PatientCreationInput input) {
-        this.personalNumber = input.getPersonalNumber();
-        this.firstName = input.getFirstName();
-        this.lastName = input.getLastName();
-        this.labId = input.getLabId();
     }
 
     public Long getId() {

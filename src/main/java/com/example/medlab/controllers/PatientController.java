@@ -1,12 +1,12 @@
 package com.example.medlab.controllers;
 
 import com.example.medlab.exceptions.ResourceNotFoundException;
-import com.example.medlab.model.dto.patient.PatientCreationInput;
+import com.example.medlab.model.dto.patient.PatientCreationRequest;
 import com.example.medlab.model.entities.Patient;
+import com.example.medlab.services.LaboratoryService;
 import com.example.medlab.services.PatientService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +23,15 @@ public class PatientController {
 
     private PatientService patientService;
 
-    public PatientController(PatientService patientService) {
+    private LaboratoryService laboratoryService;
+
+    public PatientController(PatientService patientService, LaboratoryService laboratoryService) {
         this.patientService = patientService;
+        this.laboratoryService = laboratoryService;
     }
 
     @PostMapping
-    public ResponseEntity<Patient> createUser(@Valid @RequestBody PatientCreationInput requestBody, UriComponentsBuilder builder) {
+    public ResponseEntity<Patient> createUser(@Valid @RequestBody PatientCreationRequest requestBody, UriComponentsBuilder builder) {
         Patient patient = patientService.savePatient(requestBody);
 
         URI locationOfNewPatientResource = builder
@@ -49,12 +52,20 @@ public class PatientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Patient>> getPatients() {
-        return ResponseEntity.ok(patientService.getPatients());
+    public ResponseEntity<List<Patient>> getPatients(@RequestParam(required = false) String labName) {
+        if(labName == null) {
+            return ResponseEntity.ok(patientService.getPatients());
+        } else {
+            try {
+                return ResponseEntity.ok(patientService.getPatients(labName));
+            } catch (ResourceNotFoundException e) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            }
+        }
     }
 
     @PutMapping("/{patientId}")
-    public ResponseEntity<Patient> modifyPatient(@PathVariable Long patientId, @Valid @RequestBody PatientCreationInput requestBody) {
+    public ResponseEntity<Patient> modifyPatient(@PathVariable Long patientId, @Valid @RequestBody PatientCreationRequest requestBody) {
         try {
             return ResponseEntity.ok(patientService.modifyPatient(patientId, requestBody));
         } catch (ResourceNotFoundException e) {

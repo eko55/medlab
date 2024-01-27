@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 import java.util.Date;
 
+@Builder
 @Entity
 @Table(name = "tests_results")
 public class TestResults {
@@ -22,17 +24,13 @@ public class TestResults {
     @NotNull(message = "date should not be null")
     private Date date;
 
-    @Column(name = "referral_values")
-    @NotNull(message = "referralValues should not be null")
-    private Double referralValues;
-
-    @Column(name = "units")
-    @NotBlank(message = "units should not be blank")
-    private String units;
+    @Column(name = "values")
+    @NotNull(message = "values should not be null")
+    private Double values;
 
     @Column(name = "lab_test_id")
     @NotNull(message = "labId should not be null")
-    private Long labId;
+    private Long labTestId;
 
     @Column(name = "patient_id")
     @NotNull(message = "patientId should not be null")
@@ -45,23 +43,13 @@ public class TestResults {
     public TestResults() {
     }
 
-    public TestResults(Long id, Date date, Double referralValues, String units, Long labId, Long patientId, Long labEmployeeId) {
+    public TestResults(Long id, Date date, Double values, Long labId, Long patientId, Long labEmployeeId) {
         this.id = id;
         this.date = date;
-        this.referralValues = referralValues;
-        this.units = units;
-        this.labId = labId;
+        this.values = values;
+        this.labTestId = labId;
         this.patientId = patientId;
         this.labEmployeeId = labEmployeeId;
-    }
-
-    public TestResults(TestResultsInput input) {
-        this.date = input.getDate();
-        this.referralValues = input.getReferralValues();
-        this.units = input.getUnits();
-        this.labId = input.getLabId();
-        this.patientId = input.getPatientId();
-        this.labEmployeeId = input.getLabEmployeeId();
     }
 
     public Long getId() {
@@ -80,28 +68,20 @@ public class TestResults {
         this.date = date;
     }
 
-    public Double getReferralValues() {
-        return referralValues;
+    public Double getValues() {
+        return values;
     }
 
-    public void setReferralValues(Double referralValues) {
-        this.referralValues = referralValues;
+    public void setValues(Double values) {
+        this.values = values;
     }
 
-    public String getUnits() {
-        return units;
+    public Long getLabTestId() {
+        return labTestId;
     }
 
-    public void setUnits(String units) {
-        this.units = units;
-    }
-
-    public Long getLabId() {
-        return labId;
-    }
-
-    public void setLabId(Long labId) {
-        this.labId = labId;
+    public void setLabTestId(Long labTestId) {
+        this.labTestId = labTestId;
     }
 
     public Long getPatientId() {

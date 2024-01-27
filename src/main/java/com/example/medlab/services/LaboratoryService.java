@@ -11,13 +11,18 @@ public interface LaboratoryService {
 
     Laboratory getLaboratory(Long labId);
 
+    Laboratory getLaboratory(String labName);
+
     List<Laboratory> getLaboratories();
 
     void modifyLaboratory(Long labId, LaboratoryInput laboratory);
 
-    void partiallyModifyLaboratory(Long labId, LaboratoryInput laboratory);
+    Laboratory partiallyModifyLaboratory(Long labId, LaboratoryInput laboratory);
 
     void deleteLaboratory(Long labId);
 
     boolean exists(Long labId);
+
+    boolean existsByName(String labName);
+
 }
