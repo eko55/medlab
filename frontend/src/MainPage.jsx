@@ -9,7 +9,7 @@ const MainPage = () => {
     <div className="centered-layout">
       <div className="main-container">
         <h1>Welcome to MedLab</h1>
-        <button onClick={() => navigate('/login')}>Login</button>
+        <button classname='main-page-button' onClick={() => navigate('/login')}>Login</button>
       </div>
     </div>
   );

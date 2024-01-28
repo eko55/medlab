@@ -24,13 +24,13 @@ h1 {
     color: #333;
 }
 
-button {
+.main-page-button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
 }
 
-button:hover {
+.main-page-button:hover {
     background-color: #4CAF50;
     color: rgb(173, 224, 226);
 }

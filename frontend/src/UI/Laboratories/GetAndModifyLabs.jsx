@@ -101,8 +101,11 @@ const GetAndModifyLabs = () => {
 
     return (
         <div>
-            <div>
+            <div style={{ marginBottom: '10px' }}>
                 <button onClick={handleDisplayAll}>Display All Labs</button>
+            </div>
+
+            <div>
                 <button onClick={handleDisplayLab}>Display Lab</button>
                 <input
                     type="text"

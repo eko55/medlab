@@ -44,8 +44,8 @@ const LabList = () => {
 
     return (
         <div className='main-container'>
-            <div>
-                <button onClick={toggleDisplayGetAndModifyLabs}>Show GetAndModifyLabs</button>
+            <div  style={{ marginBottom: '20px' }}>
+                <button style={{ marginRight: '10px' }} onClick={toggleDisplayGetAndModifyLabs}>Show GetAndModifyLabs</button>
                 <button onClick={toggleDisplayAddLab}>Show AddLab</button>
             </div>
 
