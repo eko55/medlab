@@ -1,15 +1,14 @@
-
 import React, { useState } from 'react';
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import validateUser from '../../ValidateUser';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState(''); // Change state variable name to 'username'
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -18,10 +17,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try {
-      const response = validateUser("","");
 
+    try {
+      const response = await validateUser(username, password);
+      
       if (response) {
         navigate('/admin/dashboard');
       } else {
@@ -37,8 +36,8 @@ const Login = () => {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <label>
-          Email:
-          <input type="email" value={email} onChange={handleEmailChange} required />
+          Username:
+          <input type="text" value={username} onChange={handleUsernameChange} required />
         </label>
         <br />
         <label>
