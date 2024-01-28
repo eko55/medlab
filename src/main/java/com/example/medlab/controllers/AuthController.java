@@ -2,25 +2,33 @@ package com.example.medlab.controllers;
 
 import com.example.medlab.model.LoginRequest;
 import com.example.medlab.model.entities.AppUser;
-import com.example.medlab.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.medlab.services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+@Tag(name = "Auth")
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
+
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
-        AppUser user = userRepository.findUserByUsername(loginRequest.getUsername());
-        if (user != null && user.getPassword().equals(loginRequest.getPassword())) {
-            return ResponseEntity.ok("User authenticated successfully");
+    public ResponseEntity<AppUser> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        AppUser user = userService.getUserByUsername(loginRequest.getUsername());
+        if (user != null && new BCryptPasswordEncoder().matches(loginRequest.getPassword(),user.getPassword())) {
+            return ResponseEntity.ok(user);
+        }else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
         }
-        return ResponseEntity.status(401).body("Invalid username or password");
     }
 }

@@ -32,7 +32,9 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeHttpRequests(request -> request.requestMatchers("/**").authenticated())
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/**").authenticated())
                 .csrf(csrf -> csrf.disable())
                 .authenticationProvider(authenticationProvider())
                 .httpBasic(Customizer.withDefaults());
@@ -56,11 +58,10 @@ public class SecurityConfig {
                     UserDetails admin = User.builder()
                             .username("admin")
                             .password(new BCryptPasswordEncoder().encode("admin"))
-                            //.roles("ADMIN") // No roles for now
                             .build();
                     return admin;
                 }
-                AppUser appUser = userRepository.findUserByUsername(username);
+                AppUser appUser = userRepository.findByUsername(username);
                 Role role = appUser.getRole();
                 return new User(appUser.getUsername(), appUser.getPassword(), Collections.singleton(new SimpleGrantedAuthority(role.name())));
             }

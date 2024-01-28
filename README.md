@@ -1,8 +1,7 @@
 # medlab
 Medical Laboratory Application
 
-Turn on database connection:
-From terminal in medlab folder run following command:
+Start the backend server executing the following command from the root of the project:
 mvn spring-boot:run
 
 Swagger link:
@@ -13,6 +12,7 @@ Node.js installed
 npm vite@latest
 
 Running frontend:
+npm install
 npm run dev
 or
 npm start
