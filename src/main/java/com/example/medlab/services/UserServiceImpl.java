@@ -2,15 +2,19 @@ package com.example.medlab.services;
 
 import com.example.medlab.exceptions.OldPasswordNotMatchingException;
 import com.example.medlab.exceptions.ResourceNotFoundException;
+import com.example.medlab.model.Role;
 import com.example.medlab.model.dto.user.UserCreationInput;
 import com.example.medlab.model.dto.user.UserPassChangeInput;
 import com.example.medlab.model.dto.user.UserRoleInput;
 import com.example.medlab.model.entities.AppUser;
 import com.example.medlab.repositories.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -38,6 +42,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public AppUser getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+
+    @Override
     public List<AppUser> getUsers() {
         return userRepository.findAll();
     }
@@ -47,7 +56,7 @@ public class UserServiceImpl implements UserService {
         if (userExists(userId)) {
             AppUser appUser = getUser(userId);
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            if (encoder.matches(userInput.getOldPassword(),appUser.getPassword())) {
+            if (encoder.matches(userInput.getOldPassword(), appUser.getPassword())) {
                 appUser.setPassword(new BCryptPasswordEncoder().encode(userInput.getNewPassword()));
                 userRepository.save(appUser);
             } else {
@@ -81,5 +90,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean userExists(Long userId) {
         return userRepository.existsById(userId);
+    }
+
+    @Override
+    public boolean hasRole(Authentication authentication, Role role) {
+        Optional<? extends GrantedAuthority> authWithExpectedRole = authentication.getAuthorities().stream().filter(auth -> auth.getAuthority().equalsIgnoreCase(role.toString())).findFirst();
+        return authWithExpectedRole.isPresent();
     }
 }

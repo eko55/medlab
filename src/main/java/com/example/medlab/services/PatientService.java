@@ -11,6 +11,8 @@ public interface PatientService {
 
     Patient getPatient(Long patientId);
 
+    Patient getPatientByUserId(Long userId);
+
     List<Patient> getPatients();
 
     List<Patient> getPatients(String labName);

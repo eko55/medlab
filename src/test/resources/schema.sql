@@ -20,7 +20,9 @@ CREATE TABLE employees (
 	first_name VARCHAR(50) NOT NULL,
 	last_name VARCHAR(255) NOT NULL,
 	lab_id INT NOT NULL,
-	FOREIGN KEY(lab_id) REFERENCES laboratories(id)
+	user_id INT NOT NULL,
+	FOREIGN KEY(lab_id) REFERENCES laboratories(id),
+	FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
 CREATE TABLE patients (
@@ -29,7 +31,9 @@ CREATE TABLE patients (
 	first_name VARCHAR(50) NOT NULL,
 	last_name VARCHAR(255) NOT NULL,
 	lab_id INT NOT NULL,
-	FOREIGN KEY(lab_id) REFERENCES laboratories(id)
+	user_id INT NOT NULL,
+	FOREIGN KEY(lab_id) REFERENCES laboratories(id),
+	FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
 CREATE TABLE lab_tests (
@@ -55,18 +59,3 @@ CREATE TABLE tests_results (
 	FOREIGN KEY(patient_id) REFERENCES patients(id),
 	FOREIGN KEY(lab_employee_id) REFERENCES employees(id)
 );
---CREATE TABLE users_roles (
---	id SERIAL PRIMARY KEY,
---	user_id VARCHAR(50) ,
---	role_id VARCHAR(255),
---	UNIQUE (username,role_name),
---    FOREIGN KEY(user_id) REFERENCES users(id),
---    FOREIGN KEY(role_id) REFERENCES roles(id)
---);
-
-
---CREATE TABLE roles (
---	id SERIAL PRIMARY KEY,
---	name VARCHAR(50) UNIQUE NOT NULL,
---	description VARCHAR(255)
---);
