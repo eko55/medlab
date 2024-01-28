@@ -3,6 +3,7 @@ package com.example.medlab.controllers;
 import com.example.medlab.model.LoginRequest;
 import com.example.medlab.model.entities.AppUser;
 import com.example.medlab.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class AuthController {
         this.userService = userService;
     }
 
+    @Operation(summary = "Authenticate an user")
     @PostMapping("/login")
     public ResponseEntity<AppUser> authenticateUser(@RequestBody LoginRequest loginRequest) {
         AppUser user = userService.getUserByUsername(loginRequest.getUsername());

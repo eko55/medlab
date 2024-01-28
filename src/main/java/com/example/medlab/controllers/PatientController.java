@@ -5,6 +5,7 @@ import com.example.medlab.model.dto.patient.PatientCreationRequest;
 import com.example.medlab.model.entities.Patient;
 import com.example.medlab.services.LaboratoryService;
 import com.example.medlab.services.PatientService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -30,8 +31,9 @@ public class PatientController {
         this.laboratoryService = laboratoryService;
     }
 
+    @Operation(summary = "Register a patient")
     @PostMapping
-    public ResponseEntity<Patient> createUser(@Valid @RequestBody PatientCreationRequest requestBody, UriComponentsBuilder builder) {
+    public ResponseEntity<Patient> createPatient(@Valid @RequestBody PatientCreationRequest requestBody, UriComponentsBuilder builder) {
         Patient patient = patientService.savePatient(requestBody);
 
         URI locationOfNewPatientResource = builder
@@ -42,6 +44,7 @@ public class PatientController {
         return ResponseEntity.created(locationOfNewPatientResource).body(patient);
     }
 
+    @Operation(summary = "Get a patient")
     @GetMapping("/{patientId}")
     public ResponseEntity<Patient> getPatient(@PathVariable Long patientId) {
         try {
@@ -51,6 +54,7 @@ public class PatientController {
         }
     }
 
+    @Operation(summary = "Get patients")
     @GetMapping
     public ResponseEntity<List<Patient>> getPatients(@RequestParam(required = false) String labName) {
         if(labName == null) {
@@ -64,6 +68,7 @@ public class PatientController {
         }
     }
 
+    @Operation(summary = "Modify patient information")
     @PutMapping("/{patientId}")
     public ResponseEntity<Patient> modifyPatient(@PathVariable Long patientId, @Valid @RequestBody PatientCreationRequest requestBody) {
         try {
@@ -73,6 +78,7 @@ public class PatientController {
         }
     }
 
+    @Operation(summary = "Delete a patient")
     @DeleteMapping("/{patientId}")
     public ResponseEntity<Void> deletePatient(@RequestParam Long patientId) {
         try {

@@ -10,6 +10,7 @@ import com.example.medlab.model.entities.TestResults;
 import com.example.medlab.services.PatientService;
 import com.example.medlab.services.TestResultsService;
 import com.example.medlab.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,7 @@ public class TestResultsController {
         this.patientService = patientService;
     }
 
+    @Operation(summary = "Create test results record")
     @PostMapping
     public ResponseEntity<TestResults> createTestResults(@Valid @RequestBody TestResultsInput requestBody, UriComponentsBuilder builder) {
         TestResults testResults = testResultsService.saveTestResult(requestBody);
@@ -51,8 +53,9 @@ public class TestResultsController {
         return ResponseEntity.created(locationOfNewTestResultsResource).body(testResults);
     }
 
+    @Operation(summary = "Get test results record")
     @GetMapping("/{testResultsId}")
-    public ResponseEntity<TestResults> getTest(@PathVariable Long testResultsId) {
+    public ResponseEntity<TestResults> getTestResults(@PathVariable Long testResultsId) {
         try {
             return ResponseEntity.ok(testResultsService.getTestResult(testResultsId));
         } catch (ResourceNotFoundException e) {
@@ -60,6 +63,7 @@ public class TestResultsController {
         }
     }
 
+    @Operation(summary = "Get tests results records")
     @GetMapping
     public ResponseEntity<List<TestResults>> getTestResults(@RequestParam(required = false) Long employeeId, @RequestParam(required = false) Long patientId, Authentication authentication) {
         if (userService.hasRole(authentication, Role.EMPLOYEE)) {
@@ -97,6 +101,7 @@ public class TestResultsController {
         }
     }
 
+    @Operation(summary = "Modify test results record")
     @PutMapping("/{testResultsId}")
     public ResponseEntity<TestResults> modifyTests(@PathVariable Long testResultsId, @Valid @RequestBody TestResultsInput requestBody) {
         try {
@@ -106,6 +111,7 @@ public class TestResultsController {
         }
     }
 
+    @Operation(summary = "Delete test results record")
     @DeleteMapping("/{testResultsId}")
     public ResponseEntity<Void> deleteTest(@RequestParam Long testResultsId) {
         try {

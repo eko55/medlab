@@ -5,6 +5,7 @@ import com.example.medlab.exceptions.ResourceNotFoundException;
 import com.example.medlab.model.dto.employee.EmployeeCreationRequest;
 import com.example.medlab.model.entities.Employee;
 import com.example.medlab.services.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    @Operation(summary = "Create an employee")
     @PostMapping
     public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeCreationRequest requestBody, UriComponentsBuilder builder) {
         Employee employee;
@@ -44,6 +46,7 @@ public class EmployeeController {
         return ResponseEntity.created(locationOfNewUserResource).body(employee);
     }
 
+    @Operation(summary = "Get an employee")
     @GetMapping("/{employeeId}")
     public ResponseEntity<Employee> getEmployee(@PathVariable Long employeeId) {
         try {
@@ -53,6 +56,7 @@ public class EmployeeController {
         }
     }
 
+    @Operation(summary = "Get employees")
     @GetMapping
     public ResponseEntity<List<Employee>> getEmployees(@RequestParam(required = false) String labName) {
         if (labName != null) {
@@ -62,6 +66,7 @@ public class EmployeeController {
         }
     }
 
+    @Operation(summary = "Modify an employee")
     @PutMapping("/{employeeId}")
     public ResponseEntity<Employee> modifyEmployee(@PathVariable Long employeeId, @Valid @RequestBody EmployeeCreationRequest requestBody) {
         try {
@@ -71,6 +76,7 @@ public class EmployeeController {
         }
     }
 
+    @Operation(summary = "Delete an employee")
     @DeleteMapping("/{employeeId}")
     public ResponseEntity<Void> deleteEmployee(@RequestParam Long employeeId) {
         try {

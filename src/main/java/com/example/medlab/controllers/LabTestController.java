@@ -4,6 +4,7 @@ import com.example.medlab.exceptions.ResourceNotFoundException;
 import com.example.medlab.model.dto.labtest.LabTestInput;
 import com.example.medlab.model.entities.LabTest;
 import com.example.medlab.services.LabTestService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class LabTestController {
         this.labTestService = labTestService;
     }
 
+    @Operation(summary = "Create a test")
     @PostMapping
     public ResponseEntity<LabTest> createTest(@Valid @RequestBody LabTestInput requestBody, UriComponentsBuilder builder) {
         LabTest test = labTestService.saveTest(requestBody);
@@ -38,6 +40,7 @@ public class LabTestController {
         return ResponseEntity.created(locationOfNewTestResource).body(test);
     }
 
+    @Operation(summary = "Get a test")
     @GetMapping("/{testId}")
     public ResponseEntity<LabTest> getTest(@PathVariable Long testId) {
         try {
@@ -47,11 +50,13 @@ public class LabTestController {
         }
     }
 
+    @Operation(summary = "Get tests")
     @GetMapping
     public ResponseEntity<List<LabTest>> getTests() {
         return ResponseEntity.ok(labTestService.getTests());
     }
 
+    @Operation(summary = "Modify a test")
     @PutMapping("/{testId}")
     public ResponseEntity<LabTest> modifyTests(@PathVariable Long testId, @Valid @RequestBody LabTestInput requestBody) {
         try {
@@ -61,6 +66,7 @@ public class LabTestController {
         }
     }
 
+    @Operation(summary = "Delete a test")
     @DeleteMapping("/{testId}")
     public ResponseEntity<Void> deleteTest(@RequestParam Long testId) {
         try {
