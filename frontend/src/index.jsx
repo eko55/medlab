@@ -5,6 +5,7 @@ import MainPage from "./MainPage";
 import "./index.css";
 import Login from "./pages/Login/Login";
 import AdminDashboard from "./pages/Admin/Dashboard";
+import Laboratories from "./pages/Admin/Laboratories";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -14,6 +15,7 @@ root.render(
         <Route path='/' element={<MainPage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/admin/dashboard' element={<AdminDashboard />}/>
+        <Route path='/admin/laboratories' element={<Laboratories />}/>
         <Route path='*' element={<Navigate to={"/"} />} />
       </Routes>
     </Router>

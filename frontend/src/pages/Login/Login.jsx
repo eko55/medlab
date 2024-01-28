@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import validateUser from '../../ValidateUser';
+import '../../UI/Buttons/MainPageButton.css'
 
 const Login = () => {
   const [username, setUsername] = useState(''); // Change state variable name to 'username'
@@ -20,7 +21,7 @@ const Login = () => {
 
     try {
       const response = await validateUser(username, password);
-      
+
       if (response) {
         navigate('/admin/dashboard');
       } else {
@@ -31,7 +32,11 @@ const Login = () => {
     }
   };
 
-  return (
+  const handleReturnToMainPage = () => {
+    navigate('/');
+  };
+
+  return (<>
     <div className='main-container'>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
@@ -45,9 +50,13 @@ const Login = () => {
           <input type="password" value={password} onChange={handlePasswordChange} required />
         </label>
         <br />
-        <button type="submit">Sign In</button>
+        <button type="submit">Login</button>
       </form>
     </div>
+    <div className='main-page-button-container'>
+      <button onClick={handleReturnToMainPage}>Return to Main Page</button>
+    </div>
+  </>
   );
 };
 

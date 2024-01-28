@@ -1,0 +1,5 @@
+.main-page-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Adjust the margin as needed for spacing */
+  }
