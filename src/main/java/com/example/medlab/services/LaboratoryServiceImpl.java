@@ -48,11 +48,11 @@ public class LaboratoryServiceImpl implements LaboratoryService {
     }
 
     @Override
-    public void modifyLaboratory(Long labId, LaboratoryInput input) {
+    public Laboratory modifyLaboratory(Long labId, LaboratoryInput input) {
         if (exists(labId)) {
             Laboratory newLab = new Laboratory(input);
             newLab.setId(labId);
-            laboratoryRepository.save(newLab);
+            return laboratoryRepository.save(newLab);
         } else {
             throw new ResourceNotFoundException("Laboratory not found.");
         }

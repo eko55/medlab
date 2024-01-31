@@ -71,10 +71,10 @@ public class LaboratoryController {
 
     @Operation(summary = "Modify a laboratory")
     @PutMapping("/{labId}")
-    public ResponseEntity<Void> modifyLaboratory(@PathVariable Long labId,@Valid @RequestBody LaboratoryInput requestBody) {
+    public ResponseEntity<Laboratory> modifyLaboratory(@PathVariable Long labId,@Valid @RequestBody LaboratoryInput requestBody) {
         try {
-            laboratoryService.modifyLaboratory(labId, requestBody);
-            return ResponseEntity.noContent().build();
+            Laboratory laboratory = laboratoryService.modifyLaboratory(labId, requestBody);
+            return ResponseEntity.ok(laboratory);
         } catch (ResourceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }

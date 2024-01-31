@@ -8,6 +8,7 @@ const LabList = () => {
     const [labs, setLabs] = useState([]);
     const [displayGetAndModifyLabs, setDisplayGetAndModifyLabs] = useState(true);
     const [displayAddLab, setDisplayAddLab] = useState(false);
+    const [responseData, setResponseData] = useState([]);
 
     useEffect(() => {
         // Fetch all labs
@@ -16,11 +17,14 @@ const LabList = () => {
 
     const getAllLabs = async () => {
         try {
-            const response = await axios.get('/api/labs'); // Replace with your backend endpoint
-            setLabs(response.data);
-        } catch (error) {
-            console.error('Error fetching labs:', error);
-        }
+                let headers = new Headers();
+                headers.set('Authorization', 'Basic '  + btoa('admin' + ":" + 'admin'));
+                const response = await fetch(`http://localhost:8080/laboratories`, {method:'GET',headers: headers,});
+                const data = await response.json();
+                setResponseData(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
     };
 
     const addLab = async (newLabData) => {

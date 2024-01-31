@@ -15,7 +15,7 @@ public interface LaboratoryService {
 
     List<Laboratory> getLaboratories();
 
-    void modifyLaboratory(Long labId, LaboratoryInput laboratory);
+    Laboratory modifyLaboratory(Long labId, LaboratoryInput laboratory);
 
     Laboratory partiallyModifyLaboratory(Long labId, LaboratoryInput laboratory);
 
