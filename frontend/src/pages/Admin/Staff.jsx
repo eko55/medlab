@@ -5,7 +5,6 @@ const Staff = () => {
     
     return (
         <>
-            <NavigationBar />
             <StaffList/>
         </>
     );

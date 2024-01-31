@@ -4,12 +4,11 @@ import './NavigationBarStyle.css'
 import LogoutButton from '../Buttons/LogoutButton';
 
 const NavigationBar = () => {
-    //TODO: Handle patient and employee page logic as well
     return (
         <nav>
             <ul>
                 <li>
-                    <Link to="/admin/dashboard">Dashboard</Link>
+                    <Link to="/admin">Dashboard</Link>
                 </li>
                 <li>
                     <Link to="/admin/laboratories">Laboratories</Link>

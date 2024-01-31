@@ -22,6 +22,7 @@ import java.util.List;
 @Tag(name = "Laboratories")
 @RestController
 @RequestMapping("/laboratories")
+@CrossOrigin(origins = "http://localhost:5173")
 public class LaboratoryController {
 
     private LaboratoryService laboratoryService;

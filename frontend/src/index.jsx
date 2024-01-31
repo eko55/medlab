@@ -11,6 +11,7 @@ import Staff from "./pages/Admin/Staff";
 import Patients from "./pages/Admin/Patients";
 import PatientExam from "./pages/Admin/PatientExam";
 import SignUp from "./pages/SignUp/SignUp";
+import Admin from "./pages/Admin/Admin";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -20,12 +21,14 @@ root.render(
         <Route path='/' element={<MainPage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
-        <Route path='/admin/dashboard' element={<AdminDashboard />} />
-        <Route path='/admin/laboratories' element={<Laboratories />} />
-        <Route path='/admin/laboratory-services' element={<LabServices />} />
-        <Route path='/admin/staff' element={<Staff />} />
-        <Route path='/admin/patients' element={<Patients />} />
-        <Route path='/admin/patient-examinations' element={<PatientExam />} />
+        <Route path='/admin' element={<Admin />}>
+          <Route path='' element={<AdminDashboard />} />
+          <Route path='laboratories' element={<Laboratories />} />
+          <Route path='laboratory-services' element={<LabServices />} />
+          <Route path='staff' element={<Staff />} />
+          <Route path='patients' element={<Patients />} />
+          <Route path='patient-examinations' element={<PatientExam />} />
+        </Route>
         <Route path='*' element={<Navigate to={"/"} />} />
       </Routes>
     </Router>

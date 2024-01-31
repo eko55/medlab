@@ -1,55 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import LabDisplay from './LabDisplay';
 
 const GetAndModifyLabs = () => {
     const [labs, setLabs] = useState([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editedLab, setEditedLab] = useState({});
-    const [displayAll, setDisplayAll] = useState(true); // New state for displaying all labs
-    const [displayLabId, setDisplayLabId] = useState(''); // New state for displaying a specific lab by ID
-
-    const fetchData = async () => {
-        try {
-            if (displayAll) {
-                await getAllLabs();
-            } else if (displayLabId.trim() !== '') {
-                await getLab(displayLabId);
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, [displayAll, displayLabId]);
-
-
+    const [displayLabId, setDisplayLabId] = useState('');
+    
     const getAllLabs = async () => {
         try {
-            // TODO: Replace with backend endpoint
-            const response = await axios.get('/api/labs');
-            const fetchedLabs = response.data || [];
-            setLabs(Array.isArray(fetchedLabs) ? fetchedLabs : []);
+            let headers = new Headers();
+            headers.set("Authorization", "Basic " + btoa("admin" + ":" + "admin"));
+            const response = await fetch(`http://localhost:8080/laboratories`, {
+                method: "GET",
+                headers: headers,
+            });
+            const data = await response.json();
+            setLabs(data);
         } catch (error) {
-            console.error('Error fetching labs:', error);
+            console.error("Error fetching data:", error);
         }
     };
 
     const getLab = async (labId) => {
         try {
-            // TODO: Replace with backend endpoint
-            const response = await axios.get(`/api/labs/${labId}`);
-            const fetchedLab = response.data;
-
-            // Ensure that fetchedLab is an object
-            if (fetchedLab && typeof fetchedLab === 'object') {
-                setLabs([fetchedLab]);
-            } else {
-                setLabs([]);
-            }
+            let headers = new Headers();
+            headers.set("Authorization", "Basic " + btoa("admin" + ":" + "admin"));
+            const response = await fetch(`http://localhost:8080/laboratories/${labId}`, {
+                method: "GET",
+                headers: headers,
+            });
+            const data = await response.json();
+            setLabs(data);
         } catch (error) {
-            console.error('Error fetching lab:', error);
+            console.error("Error fetching data:", error);
         }
     };
 
@@ -60,25 +44,34 @@ const GetAndModifyLabs = () => {
 
     const handleSave = async () => {
         try {
-            // TODO: Replace with backend endpoint
-            const response = await axios.put(`/api/labs/${editedLab.id}`, editedLab);
+            let headers = new Headers();
+            headers.set("Authorization", "Basic " + btoa("admin" + ":" + "admin"));
+            headers.set("Content-Type", "application/json; charset=UTF-8");
+            await fetch(`http://localhost:8080/laboratories/${editedLab.id}`, {
+                method: "PUT",
+                headers: headers,
+                body: JSON.stringify(editedLab)
+            });
             setIsEditing(false);
-            setEditedLab({});
-            setLabs((prevLabs) =>
-                prevLabs.map((lab) => (lab.id === response.data.id ? response.data : lab))
-            );
+            setLabs([]);
         } catch (error) {
-            console.error('Error editing lab:', error);
+            console.error("Error fetching data:", error);
         }
     };
 
     const handleRemove = async (labId) => {
         try {
-            // TODO: Replace with backend endpoint
-            await axios.delete(`/api/labs/${labId}`);
-            setLabs((prevLabs) => prevLabs.filter((lab) => lab.id !== labId));
+            let headers = new Headers();
+            headers.set("Authorization", "Basic " + btoa("admin" + ":" + "admin"));
+            const response = await fetch(`http://localhost:8080/laboratories/${labId}`, {
+                method: "DELETE",
+                headers: headers,
+            });
+            const data = await response.json();
+            console.log(data);
+            setLabs([]);
         } catch (error) {
-            console.error('Error removing lab:', error);
+            console.error("Error fetching data:", error);
         }
     };
 
@@ -86,13 +79,13 @@ const GetAndModifyLabs = () => {
         setEditedLab({ ...editedLab, [field]: e.target.value });
     };
 
-    const handleDisplayAll = () => {
-        setDisplayAll(true);
+    const handleDisplayAll = async () => {
         setDisplayLabId('');
+        await getAllLabs();
     };
 
-    const handleDisplayLab = () => {
-        setDisplayAll(false);
+    const handleDisplayLab = async () => {
+        await getLab(displayLabId);
     };
 
     const handleLabIdChange = (e) => {
@@ -145,19 +138,7 @@ const GetAndModifyLabs = () => {
                 </>
             ) : (
                 <>
-                    <ul>
-                        {labs.map((lab) => (
-                            <li key={lab.id}>
-                                <div>{lab.name}</div>
-                                <div>{lab.address}</div>
-                                <div>{lab.email}</div>
-                                <div>{lab.phone}</div>
-                                <div>{lab.hospitalName}</div>
-                                <button onClick={() => handleEdit(lab)}>Edit</button>
-                                <button onClick={() => handleRemove(lab.id)}>Remove</button>
-                            </li>
-                        ))}
-                    </ul>
+                     <LabDisplay labs={labs} isSmallScreen={window.innerWidth < 768} onEdit={handleEdit} onRemove={handleRemove} />
                 </>
             )}
         </div>

@@ -5,7 +5,6 @@ const PatientExam = () => {
 
     return (
         <>
-            <NavigationBar />
             <PatientExamList />
         </>
     );

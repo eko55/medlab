@@ -5,7 +5,6 @@ const LabServices = () => {
     
     return (
         <>
-            <NavigationBar />
             <LabServicesList />
         </>
     );

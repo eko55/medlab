@@ -2,7 +2,7 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  background: url('/images/background.webp') center/cover no-repeat;
+  background: url('/images/background.webp') center/cover no-repeat fixed;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

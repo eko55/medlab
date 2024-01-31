@@ -1,10 +1,8 @@
 import React from 'react';
-import NavigationBar from '../../UI/NavigationBar/NavigationBar';
 
 const AdminDashboard = () => {
   return (
     <>
-      <NavigationBar />
       <div className='main-container'>
         <h2>Welcome to the Admin Dashboard!</h2>
         <p>From here, you can manage laboratories, employees, patients and patient exams.</p>

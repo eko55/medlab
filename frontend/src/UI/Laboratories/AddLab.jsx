@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const AddLab = () => {
+    const [responseData, setResponseData] = useState([]);
     const [newLab, setNewLab] = useState({
         name: '',
         address: '',
@@ -16,23 +16,29 @@ const AddLab = () => {
 
     const handleAddLab = async () => {
         try {
-            // TODO: Replace with backend endpoint
-            const response = await axios.post('/api/labs', newLab);
-            // You can handle any frontend logic here (e.g., displaying a success message)
-            console.log('Lab added successfully:', response.data);
-
-            // Clear the input fields
-            setNewLab({
-                name: '',
-                address: '',
-                email: '',
-                phone: '',
-                hospitalName: '',
+            let headers = new Headers();
+            headers.set("Authorization", "Basic " + btoa("admin" + ":" + "admin"));
+            headers.set("Content-Type", "application/json; charset=UTF-8");
+            const response = await fetch(`http://localhost:8080/laboratories`, {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(newLab)
             });
+            const data = await response.json();
+            setResponseData(data);
+            console.log('Lab added successfully:', response);
         } catch (error) {
-            // Handle errors (e.g., display an error message)
-            console.error('Error adding lab:', error);
+            console.error("Error fetching data:", error);
         }
+
+        // Clear the input fields
+        setNewLab({
+            name: '',
+            address: '',
+            email: '',
+            phone: '',
+            hospitalName: '',
+        });
     };
 
     return (
@@ -87,6 +93,30 @@ const AddLab = () => {
             </div>
 
             <button style={{ marginTop: '10px' }} onClick={handleAddLab}>Add Lab</button>
+            {responseData && responseData.length > 0 && (
+                <table className="centerTable">
+                    <thead style={{ backgroundColor: "#f2f2f2" }}>
+                        <tr>
+                            <th className="tableHeader">Id</th>
+                            <th className="tableHeader">Name</th>
+                            <th className="tableHeader">Address</th>
+                            <th className="tableHeader">Email</th>
+                            <th className="tableHeader">Phone</th>
+                            <th className="tableHeader">Hospital Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr className="tableRow">
+                            <td className="tableCell">{responseData.id}</td>
+                            <td className="tableCell">{responseData.name}</td>
+                            <td className="tableCell">{responseData.address}</td>
+                            <td className="tableCell">{responseData.email}</td>
+                            <td className="tableCell">{responseData.phone}</td>
+                            <td className="tableCell">{responseData.hospitalName}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            )}
         </div>
     );
 };
