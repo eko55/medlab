@@ -23,7 +23,7 @@ const Login = () => {
       const response = await validateUser(username, password);
 
       if (response) {
-        navigate('/admin/dashboard');
+        navigate('/admin');
       } else {
         console.error('Authentication failed');
       }

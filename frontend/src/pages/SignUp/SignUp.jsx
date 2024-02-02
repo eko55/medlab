@@ -25,16 +25,40 @@ const SignUp = () => {
         e.preventDefault();
 
         try {
-            //TODO: Handle SignUp properly
-            const response = await validateUser(username, password, role);
-
-            if (response) {
-                navigate('/admin/dashboard');
+            const response = await createUserOnBackend();
+            console.log("Response:", response);
+            if (response.status === 201) {
+                const userData = {
+                    username,
+                    role,
+                };
+                sessionStorage.setItem('userData', JSON.stringify(userData));
+                navigate('/admin');
             } else {
                 console.error('User registration failed');
             }
         } catch (error) {
             console.error('Error during user registration:', error);
+        }
+    };
+
+    const createUserOnBackend = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username,
+                    password,
+                    role,
+                }),
+            });
+
+            return response;
+        } catch (error) {
+            throw new Error('Error creating user on backend:', error);
         }
     };
 
