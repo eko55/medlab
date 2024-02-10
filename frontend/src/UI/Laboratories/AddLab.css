@@ -1,0 +1,16 @@
+/* YourComponent.css */
+.AddLab {
+    width: 100%; /* Set an initial width */
+  }
+  
+  @media (min-width: 768px) {
+    .your-component {
+      width: 50%; /* Adjust width for screens wider than 768px */
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .your-component {
+      width: 30%; /* Adjust width for screens wider than 1024px */
+    }
+  }
