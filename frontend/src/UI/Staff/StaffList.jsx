@@ -1,35 +1,97 @@
-import React, { useState } from 'react';
-import GetAndModifyStaff from './GetAndModifyStaff';
-import AddStaff from './AddStaff';
+import React, { useState } from "react";
+import GetEmployees from "./GetEmployees";
+import GetEmployee from "./GetEmployee";
+import CreateEmployee from "./CreateEmployee";
+import ModifyEmployee from "./ModifyEmployee";
+import DeleteEmployee from "./DeleteEmployee";
 
 const StaffList = () => {
-    const [displayGetAndModifyStaff, setDisplayGetAndModifyStaff] = useState(true);
-    const [displayAddStaff, setDisplayAddStaff] = useState(false);
+  const [displayAllEmployees, setDisplayAllEmployees] = useState(false);
+  const [displayEmployee, setDisplayEmployee] = useState(false);
+  const [displayCreateEmployee, setDisplayCreateEmployee] = useState(false);
+  const [displayModifyEmployee, setDisplayModifyEmployee] = useState(false);
+  const [displayDeleteEmployee, setDisplayDeleteEmployee] = useState(false);
 
-    const toggleDisplayGetAndModifyStaff = () => {
-        setDisplayGetAndModifyStaff(true);
-        setDisplayAddStaff(false);
-    };
+  const toggleDisplayAllEmployees = () => {
+    setDisplayEmployee(false);
+    setDisplayCreateEmployee(false);
+    setDisplayModifyEmployee(false);
+    setDisplayDeleteEmployee(false);
+    setDisplayAllEmployees(true);
+  };
 
-    const toggleDisplayAddStaff = () => {
-        setDisplayGetAndModifyStaff(false);
-        setDisplayAddStaff(true);
-    };
+  const toggleDisplayEmployee = () => {
+    setDisplayAllEmployees(false);
+    setDisplayCreateEmployee(false);
+    setDisplayModifyEmployee(false);
+    setDisplayDeleteEmployee(false);
+    setDisplayEmployee(true);
+  };
 
-    return (
-        <div className="main-container">
-            <div style={{ marginBottom: '20px' }}>
-                <button style={{ marginRight: '10px' }} onClick={toggleDisplayGetAndModifyStaff}>
-                    Get or Edit Staff
-                </button>
-                <button onClick={toggleDisplayAddStaff}>Add Staff</button>
-            </div>
+  const toggleDisplayCreateEmployee = () => {
+    setDisplayAllEmployees(false);
+    setDisplayEmployee(false);
+    setDisplayModifyEmployee(false);
+    setDisplayDeleteEmployee(false);
+    setDisplayCreateEmployee(true);
+  };
 
-            {displayGetAndModifyStaff && <GetAndModifyStaff />}
+  const toggleDisplayModifyEmployee = () => {
+    setDisplayAllEmployees(false);
+    setDisplayEmployee(false);
+    setDisplayCreateEmployee(false);
+    setDisplayDeleteEmployee(false);
+    setDisplayModifyEmployee(true);
+  };
 
-            {displayAddStaff && <AddStaff />}
-        </div>
-    );
+  const toggleDisplayDeleteEmployee = () => {
+    setDisplayAllEmployees(false);
+    setDisplayEmployee(false);
+    setDisplayCreateEmployee(false);
+    setDisplayModifyEmployee(false);
+    setDisplayDeleteEmployee(true);
+  };
+
+  return (
+    <div className="main-container">
+      <div style={{ marginBottom: "20px" }}>
+        <button
+          style={{ marginRight: "10px" }}
+          onClick={toggleDisplayAllEmployees}
+        >
+          Employees
+        </button>
+        <button style={{ marginRight: "10px" }} onClick={toggleDisplayEmployee}>
+          Search for employee by Id
+        </button>
+
+        <button
+          style={{ marginRight: "10px" }}
+          onClick={toggleDisplayCreateEmployee}
+        >
+          Create employee
+        </button>
+        <button
+          style={{ marginRight: "10px" }}
+          onClick={toggleDisplayModifyEmployee}
+        >
+          Modify employee
+        </button>
+        <button
+          style={{ marginRight: "10px" }}
+          onClick={toggleDisplayDeleteEmployee}
+        >
+          Delete employee
+        </button>
+      </div>
+
+      {displayAllEmployees && <GetEmployees />}
+      {displayEmployee && <GetEmployee />}
+      {displayCreateEmployee && <CreateEmployee />}
+      {displayModifyEmployee && <ModifyEmployee />}
+      {displayDeleteEmployee && <DeleteEmployee />}
+    </div>
+  );
 };
 
 export default StaffList;

@@ -58,6 +58,7 @@ public class SecurityConfig {
                     UserDetails admin = User.builder()
                             .username("admin")
                             .password(new BCryptPasswordEncoder().encode("admin"))
+                            .roles("EMPLOYEE")
                             .build();
                     return admin;
                 }

@@ -78,7 +78,7 @@ public class EmployeeController {
 
     @Operation(summary = "Delete an employee")
     @DeleteMapping("/{employeeId}")
-    public ResponseEntity<Void> deleteEmployee(@RequestParam Long employeeId) {
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long employeeId) {
         try {
             employeeService.deleteEmployee(employeeId);
             return ResponseEntity.noContent().build();

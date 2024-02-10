@@ -2,6 +2,7 @@ package com.example.medlab.model.dto.patient;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class PatientCreationRequest {
 
@@ -18,15 +19,19 @@ public class PatientCreationRequest {
     @NotBlank(message = "labName must not be null")
     private String labName;
 
+    @Column(name = "user_id")
+    @NotNull(message = "userId must not be null")
+    private Long userId;
 
     public PatientCreationRequest() {
     }
 
-    public PatientCreationRequest(Long id, String personalNumber, String firstName, String lastName, String labName) {
+    public PatientCreationRequest(String personalNumber, String firstName, String lastName, String labName, Long userId) {
         this.personalNumber = personalNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.labName = labName;
+        this.userId = userId;
     }
 
     public String getPersonalNumber() {
@@ -59,5 +64,13 @@ public class PatientCreationRequest {
 
     public void setLabName(String labName) {
         this.labName = labName;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

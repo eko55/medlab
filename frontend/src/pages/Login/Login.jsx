@@ -25,6 +25,7 @@ const Login = () => {
       if (response) {
         navigate('/admin');
       } else {
+        alert("Ivalid username or password!");
         console.error('Authentication failed');
       }
     } catch (error) {

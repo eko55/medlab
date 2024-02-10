@@ -1,35 +1,98 @@
-import React, { useState } from 'react';
-import GetAndModifyPatients from './GetAndModifyPatients';
-import AddPatient from './AddPatient';
+import React, { useState } from "react";
+import GetPatients from "./GetPatients";
+import GetPatient from "./GetPatient";
+import CreatePatient from "./CreatePatient";
+import ModifyPatient from "./ModifyPatient";
+import DeletePatient from "./DeletePatient";
 
 const PatientList = () => {
-    const [displayGetAndModifyPatients, setDisplayGetAndModifyPatients] = useState(true);
-    const [displayAddPatients, setDisplayAddPatients] = useState(false);
+  const [displayAllPatients, setDisplayAllPatients] = useState(false);
+  const [displayPatient, setDisplayPatient] = useState(false);
+  const [displayCreatePatient, setDisplayCreatePatient] = useState(false);
+  const [displayModifyPatient, setDisplayModifyPatient] = useState(false);
+  const [displayDeletePatient, setDisplayDeletePatient] = useState(false);
 
-    const toggleDisplayGetAndModifyPatients = () => {
-        setDisplayGetAndModifyPatients(true);
-        setDisplayAddPatients(false);
-    };
+  const toggleDisplayAllPatients = () => {
+    setDisplayPatient(false);
+    setDisplayCreatePatient(false);
+    setDisplayModifyPatient(false);
+    setDisplayDeletePatient(false);
+    setDisplayAllPatients(true);
+  };
 
-    const toggleDisplayAddPatients = () => {
-        setDisplayGetAndModifyPatients(false);
-        setDisplayAddPatients(true);
-    };
+  const toggleDisplayPatient = () => {
+    setDisplayAllPatients(false);
+    setDisplayCreatePatient(false);
+    setDisplayModifyPatient(false);
+    setDisplayDeletePatient(false);
+    setDisplayPatient(true);
+  };
 
-    return (
-        <div className="main-container">
-            <div style={{ marginBottom: '20px' }}>
-                <button style={{ marginRight: '10px' }} onClick={toggleDisplayGetAndModifyPatients}>
-                    Get or Edit Patients
-                </button>
-                <button onClick={toggleDisplayAddPatients}>Add Patient</button>
-            </div>
+  const toggleDisplayCreatePatient = () => {
+    setDisplayAllPatients(false);
+    setDisplayPatient(false);
+    setDisplayCreatePatient(false);
+    setDisplayModifyPatient(false);
+    setDisplayDeletePatient(false);
+    setDisplayCreatePatient(true);
+  };
 
-            {displayGetAndModifyPatients && <GetAndModifyPatients />}
+  const toggleDisplayModifyPatient = () => {
+    setDisplayAllPatients(false);
+    setDisplayPatient(false);
+    setDisplayCreatePatient(false);
+    setDisplayDeletePatient(false);
+    setDisplayModifyPatient(true);
+  };
 
-            {displayAddPatients && <AddPatient />}
-        </div>
-    );
+  const toggleDisplayDeletePatient = () => {
+    setDisplayAllPatients(false);
+    setDisplayPatient(false);
+    setDisplayCreatePatient(false);
+    setDisplayModifyPatient(false);
+    setDisplayDeletePatient(true);
+  };
+
+  return (
+    <div className="main-container">
+      <div style={{ marginBottom: "20px" }}>
+        <button
+          style={{ marginRight: "10px" }}
+          onClick={toggleDisplayAllPatients}
+        >
+          Patients
+        </button>
+        <button style={{ marginRight: "10px" }} onClick={toggleDisplayPatient}>
+          Search for Patient by Id
+        </button>
+
+        <button
+          style={{ marginRight: "10px" }}
+          onClick={toggleDisplayCreatePatient}
+        >
+          Create Patient
+        </button>
+        <button
+          style={{ marginRight: "10px" }}
+          onClick={toggleDisplayModifyPatient}
+        >
+          Modify Patient
+        </button>
+        <button
+          style={{ marginRight: "10px" }}
+          onClick={toggleDisplayDeletePatient}
+        >
+          Delete Patient
+        </button>
+      </div>
+
+      {displayAllPatients && <GetPatients />}
+      {displayPatient && <GetPatient />}
+      {displayCreatePatient && <CreatePatient />}
+      {displayModifyPatient && <ModifyPatient />}
+      {displayDeletePatient && <DeletePatient />}
+    </div>
+  );
 };
 
 export default PatientList;

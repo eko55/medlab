@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
 
@@ -33,6 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService{
                         .firstName(request.getFirstName())
                         .lastName(request.getLastName())
                         .labId(lab.getId())
+                        .userId(request.getUserId())
                         .build();
                 return employeeRepository.save(employee);
             } else {
@@ -71,13 +72,15 @@ public class EmployeeServiceImpl implements EmployeeService{
     public Employee modifyEmployee(Long employeeId, EmployeeCreationRequest request) {
         if (laboratoryRepository.existsByName(request.getLabName())) {
             Laboratory lab = laboratoryRepository.findByName(request.getLabName());
-            if (!employeeRepository.existsByPersonalNumber(request.getPersonalNumber())) {
+            if (!employeeRepository.existsByPersonalNumber(request.getPersonalNumber())
+                    || employeeRepository.findByPersonalNumber(request.getPersonalNumber()).getId().equals(employeeId)) {
                 Employee employee = Employee.builder()
                         .id(employeeId)
                         .personalNumber(request.getPersonalNumber())
                         .firstName(request.getFirstName())
                         .lastName(request.getLastName())
                         .labId(lab.getId())
+                        .userId(request.getUserId())
                         .build();
                 return employeeRepository.save(employee);
             } else {
@@ -92,7 +95,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public void deleteEmployee(Long employeeId) {
         if (employeeExists(employeeId)) {
-           employeeRepository.deleteById(employeeId);
+            employeeRepository.deleteById(employeeId);
         } else {
             throw new ResourceNotFoundException(String.format("Employee with id %s doesn't exists.", employeeId));
         }

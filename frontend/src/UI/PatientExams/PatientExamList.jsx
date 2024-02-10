@@ -1,35 +1,42 @@
-import React, { useState } from 'react';
-import GetAndModifyPatientExams from './GetAndModifyPatientExams';
-import AddPatientExam from './AddPatientExam';
+import React, { useState } from "react";
+import GetTestResults from "./GetTestResults";
+import GetTestResult from "./GetTestResult";
 
 const PatientExamList = () => {
-    const [displayGetAndModifyPatientExams, setDisplayGetAndModifyPatientExams] = useState(true);
-    const [displayAddPatientExams, setDisplayAddPatientExams] = useState(false);
+  const [displayTestResults, setDisplayTestResults] = useState(false);
+  const [displayTestResult, setDisplayTestResult] = useState(false);
 
-    const toggleDisplayGetAndModifyPatientExams = () => {
-        setDisplayGetAndModifyPatientExams(true);
-        setDisplayAddPatientExams(false);
-    };
+  const toggleDisplayTestResults = () => {
+    setDisplayTestResult(false);
+    setDisplayTestResults(true);
+  };
 
-    const toggleDisplayAddPatientExams = () => {
-        setDisplayGetAndModifyPatientExams(false);
-        setDisplayAddPatientExams(true);
-    };
+  const toggleDisplayTestResult = () => {
+    setDisplayTestResults(false);
+    setDisplayTestResult(true);
+  };
 
-    return (
-        <div className="main-container">
-            <div style={{ marginBottom: '20px' }}>
-                <button style={{ marginRight: '10px' }} onClick={toggleDisplayGetAndModifyPatientExams}>
-                    Get or Edit Patient Exams
-                </button>
-                <button onClick={toggleDisplayAddPatientExams}>Add Patient Exam</button>
-            </div>
+  return (
+    <div className="main-container">
+      <div style={{ marginBottom: "20px" }}>
+        <button
+          style={{ marginRight: "10px" }}
+          onClick={toggleDisplayTestResults}
+        >
+          Get Test Results
+        </button>
+        <button
+          style={{ marginRight: "10px" }}
+          onClick={toggleDisplayTestResult}
+        >
+          Get Test Result
+        </button>
+      </div>
 
-            {displayGetAndModifyPatientExams && <GetAndModifyPatientExams />}
-
-            {displayAddPatientExams && <AddPatientExam />}
-        </div>
-    );
+      {displayTestResults && <GetTestResults />}
+      {displayTestResult && <GetTestResult />}
+    </div>
+  );
 };
 
 export default PatientExamList;

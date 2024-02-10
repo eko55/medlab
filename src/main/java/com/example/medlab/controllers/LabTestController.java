@@ -1,5 +1,6 @@
 package com.example.medlab.controllers;
 
+import com.example.medlab.exceptions.ResourceAlreadyExistsException;
 import com.example.medlab.exceptions.ResourceNotFoundException;
 import com.example.medlab.model.dto.labtest.LabTestInput;
 import com.example.medlab.model.entities.LabTest;
@@ -30,7 +31,12 @@ public class LabTestController {
     @Operation(summary = "Create a test")
     @PostMapping
     public ResponseEntity<LabTest> createTest(@Valid @RequestBody LabTestInput requestBody, UriComponentsBuilder builder) {
-        LabTest test = labTestService.saveTest(requestBody);
+        LabTest test;
+        try {
+            test = labTestService.saveTest(requestBody);
+        } catch (ResourceAlreadyExistsException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
 
         URI locationOfNewTestResource = builder
                 .path("tests/{id}")
@@ -68,7 +74,7 @@ public class LabTestController {
 
     @Operation(summary = "Delete a test")
     @DeleteMapping("/{testId}")
-    public ResponseEntity<Void> deleteTest(@RequestParam Long testId) {
+    public ResponseEntity<Void> deleteTest(@PathVariable Long testId) {
         try {
             labTestService.deleteTest(testId);
             return ResponseEntity.noContent().build();

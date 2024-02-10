@@ -9,5 +9,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     boolean existsByPersonalNumber(String personalNumber);
 
+    Employee findByPersonalNumber(String personalNumber);
+
     List<Employee> findByLabId(Long labId);
 }

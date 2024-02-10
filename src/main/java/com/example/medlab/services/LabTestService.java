@@ -19,5 +19,7 @@ public interface LabTestService {
 
     void deleteTest(Long testId);
 
-    boolean testExists(Long testId);
+    boolean existsById(Long testId);
+
+    boolean existsByNameAndLabId(String name, Long labId);
 }

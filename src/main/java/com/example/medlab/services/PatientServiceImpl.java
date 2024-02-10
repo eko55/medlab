@@ -35,6 +35,7 @@ public class PatientServiceImpl implements PatientService {
                         .firstName(request.getFirstName())
                         .lastName(request.getLastName())
                         .labId(lab.getId())
+                        .userId(request.getUserId())
                         .build();
                 return patientRepository.save(patient);
             } else {
@@ -79,13 +80,15 @@ public class PatientServiceImpl implements PatientService {
     public Patient modifyPatient(Long patientId, PatientCreationRequest request) {
         if (laboratoryService.existsByName(request.getLabName())) {
             Laboratory lab = laboratoryService.getLaboratory(request.getLabName());
-            if (!patientRepository.existsByPersonalNumber(request.getPersonalNumber())) {
+            if (!patientRepository.existsByPersonalNumber(request.getPersonalNumber())
+                    || patientRepository.findByPersonalNumber(request.getPersonalNumber()).getId().equals(patientId)) {
                 Patient patient = Patient.builder()
                         .id(patientId)
                         .personalNumber(request.getPersonalNumber())
                         .firstName(request.getFirstName())
                         .lastName(request.getLastName())
                         .labId(lab.getId())
+                        .userId(request.getUserId())
                         .build();
                 return patientRepository.save(patient);
             } else {

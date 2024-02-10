@@ -80,7 +80,7 @@ public class PatientController {
 
     @Operation(summary = "Delete a patient")
     @DeleteMapping("/{patientId}")
-    public ResponseEntity<Void> deletePatient(@RequestParam Long patientId) {
+    public ResponseEntity<Void> deletePatient(@PathVariable Long patientId) {
         try {
             patientService.deletePatient(patientId);
             return ResponseEntity.noContent().build();

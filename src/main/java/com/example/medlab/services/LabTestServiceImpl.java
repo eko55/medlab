@@ -1,5 +1,6 @@
 package com.example.medlab.services;
 
+import com.example.medlab.exceptions.ResourceAlreadyExistsException;
 import com.example.medlab.exceptions.ResourceNotFoundException;
 import com.example.medlab.model.dto.labtest.LabTestInput;
 import com.example.medlab.model.entities.LabTest;
@@ -18,14 +19,18 @@ public class LabTestServiceImpl implements LabTestService {
     }
 
     @Override
-    public LabTest saveTest(LabTestInput labTestInput) {
-        LabTest test = new LabTest(labTestInput);
-        return labTestRepository.save(test);
+    public LabTest saveTest(LabTestInput input) {
+        if (!existsByNameAndLabId(input.getName(), input.getLabId())) {
+            LabTest test = new LabTest(input);
+            return labTestRepository.save(test);
+        } else {
+            throw new ResourceAlreadyExistsException("A test with the given name and lab id already exists!");
+        }
     }
 
     @Override
     public LabTest getTest(Long testId) {
-        if (testExists(testId)) {
+        if (existsById(testId)) {
             return labTestRepository.findById(testId).get();
         } else {
             throw new ResourceNotFoundException(String.format("Test with id %s doesn't exists.", testId));
@@ -44,7 +49,7 @@ public class LabTestServiceImpl implements LabTestService {
 
     @Override
     public LabTest modifyTest(Long testId, LabTestInput input) {
-        if (testExists(testId)) {
+        if (existsById(testId)) {
             LabTest test = new LabTest(input);
             test.setId(testId);
             return labTestRepository.save(test);
@@ -55,7 +60,7 @@ public class LabTestServiceImpl implements LabTestService {
 
     @Override
     public void deleteTest(Long testId) {
-        if (testExists(testId)) {
+        if (existsById(testId)) {
             labTestRepository.deleteById(testId);
         } else {
             throw new ResourceNotFoundException(String.format("Test with id %s doesn't exists.", testId));
@@ -63,7 +68,12 @@ public class LabTestServiceImpl implements LabTestService {
     }
 
     @Override
-    public boolean testExists(Long testId) {
+    public boolean existsById(Long testId) {
         return labTestRepository.existsById(testId);
+    }
+
+    @Override
+    public boolean existsByNameAndLabId(String name, Long labId) {
+        return labTestRepository.existsByNameAndLabId(name, labId);
     }
 }
